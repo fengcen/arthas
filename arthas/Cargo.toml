@@ -1,7 +1,8 @@
 [package]
 name = "arthas"
-description = "Arthas is an in-memory structure database."
 version = "0.1.0"
+description = "Arthas is an in-memory structure database."
+keywords = ["database", "in-memory", "structure", "db", "embedded"]
 authors = ["fengcen <fengcen.love@gmail.com>"]
 repository = "https://github.com/fengcen/arthas.git"
 homepage = "https://github.com/fengcen/arthas"
