@@ -147,6 +147,7 @@ pub use query::Query;
 pub use error::Error;
 pub use item::Id;
 
+#[doc(hidden)]
 pub mod types;
 pub mod config;
 
