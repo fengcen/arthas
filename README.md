@@ -18,7 +18,7 @@ Arthas required latest **Nightly** Rust.
 * Persistence
 * Automatically update fields
 * Automatic indexing
-* Use structure without `ORM`
+* Use structure without ORM
 * No complicated setup is required
 
 
@@ -37,6 +37,7 @@ In your `main.rs` or `lib.rs`:
 ```rust
 #![feature(proc_macro, plugin, custom_derive)]
 #![plugin(arthas_plugin)]
+
 #[macro_use]
 extern crate serde_derive;
 extern crate arthas;
