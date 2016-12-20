@@ -196,7 +196,7 @@ impl Node {
     }
 
     fn search_max_root(&self, stopped: &AtomicBool, groups: &mut Groups, sub: &mut Sub) {
-        let action_option = self.search_min_or_max_current(stopped, groups, sub);
+        let action_option = self.search_max_current(stopped, groups, sub);
         if action_option.is_some() {
             self.search_min_or_max_go_right_or_go_left(action_option.unwrap(),
                                                        stopped,
@@ -206,7 +206,7 @@ impl Node {
     }
 
     fn search_min_root(&self, stopped: &AtomicBool, groups: &mut Groups, sub: &mut Sub) {
-        let action_option = self.search_min_or_max_current(stopped, groups, sub);
+        let action_option = self.search_min_current(stopped, groups, sub);
         if action_option.is_some() {
             self.search_min_or_max_go_right_or_go_left(action_option.unwrap(),
                                                        stopped,
@@ -216,19 +216,13 @@ impl Node {
     }
 
     pub fn search_max(&self, stopped: &AtomicBool, groups: &mut Groups, sub: &mut Sub) {
-        let action_option = self.search_current(stopped, groups, sub);
+        let action_option = self.search_max_current(stopped, groups, sub);
         if action_option.is_some() {
             let action = action_option.unwrap();
 
-            if action.take {
-                self.append_to(groups);
-            }
-
             let mut should_stop = true;
 
-            if action.fold_left {
-                self.fold_left_top(groups);
-            } else if action.go_left {
+            if !action.fold_left && action.go_left {
                 if self.left.is_some() {
                     self.go_left(stopped, groups, sub);
                 }
@@ -242,23 +236,21 @@ impl Node {
             if should_stop {
                 return stop(stopped, sub);
             }
+        } else {
+            if !stopped.load(Ordering::SeqCst) {
+                return stop(stopped, sub);
+            }
         }
     }
 
     pub fn search_min(&self, stopped: &AtomicBool, groups: &mut Groups, sub: &mut Sub) {
-        let action_option = self.search_current(stopped, groups, sub);
+        let action_option = self.search_min_current(stopped, groups, sub);
         if action_option.is_some() {
             let action = action_option.unwrap();
 
-            if action.take {
-                self.append_to(groups);
-            }
-
             let mut should_stop = true;
 
-            if action.fold_right {
-                self.fold_right_top(groups);
-            } else if action.go_right {
+            if !action.fold_right && action.go_right {
                 if self.right.is_some() {
                     self.go_right(stopped, groups, sub);
                 }
@@ -269,7 +261,11 @@ impl Node {
                 }
             }
 
-            if should_stop {
+            if should_stop && !stopped.load(Ordering::SeqCst) {
+                return stop(stopped, sub);
+            }
+        } else {
+            if !stopped.load(Ordering::SeqCst) {
                 return stop(stopped, sub);
             }
         }
@@ -295,11 +291,11 @@ impl Node {
         self.parent.as_ref().unwrap().read().unwrap().search_min(stopped, groups, sub);
     }
 
-    fn search_min_or_max_current(&self,
-                                 stopped: &AtomicBool,
-                                 groups: &mut Groups,
-                                 sub: &mut Sub)
-                                 -> Option<SearchAction> {
+    fn search_min_current(&self,
+                          stopped: &AtomicBool,
+                          groups: &mut Groups,
+                          sub: &mut Sub)
+                          -> Option<SearchAction> {
         if stopped.load(Ordering::SeqCst) {
             thread_trace!("search min current, other threads had stopped, return none");
             return None;
@@ -312,7 +308,35 @@ impl Node {
         }
 
         let action = action_option.unwrap();
-        self.fold_action(&action, groups);
+        self.fold_min_action(&action, groups);
+
+        if action.is_stopped() {
+            thread_trace!("search min current, action is stopped, return none");
+            return None;
+        }
+
+        thread_trace!("search min current, found some action: {:?}", action);
+        Some(action)
+    }
+
+    fn search_max_current(&self,
+                          stopped: &AtomicBool,
+                          groups: &mut Groups,
+                          sub: &mut Sub)
+                          -> Option<SearchAction> {
+        if stopped.load(Ordering::SeqCst) {
+            thread_trace!("search min current, other threads had stopped, return none");
+            return None;
+        }
+
+        let action_option = self.compare_self(&sub.comparisions);
+        if action_option.is_none() {
+            thread_trace!("search min current, action is none, return none");
+            return None;
+        }
+
+        let action = action_option.unwrap();
+        self.fold_max_action(&action, groups);
 
         if action.is_stopped() {
             thread_trace!("search min current, action is stopped, return none");
@@ -412,10 +436,38 @@ impl Node {
         }
     }
 
+    fn fold_min_action(&self, action: &SearchAction, groups: &mut Groups) {
+        if action.take {
+            thread_trace!("fold min action, take current childs: {:?}",
+                          &*self.group.read().unwrap());
+
+            self.append_to(groups);
+        }
+
+        if action.fold_right {
+            thread_trace!("fold min action, fold right");
+            self.fold_right_top(groups);
+        }
+    }
+
+    fn fold_max_action(&self, action: &SearchAction, groups: &mut Groups) {
+        if action.take {
+            thread_trace!("fold max action, take current childs: {:?}",
+                          &*self.group.read().unwrap());
+
+            self.append_to(groups);
+        }
+
+        if action.fold_left {
+            thread_trace!("fold max action, fold left");
+            self.fold_left_top(groups);
+        }
+    }
+
     fn fold_action(&self, action: &SearchAction, groups: &mut Groups) {
         if action.take {
-            thread_trace!("fold action, take current childs: {}",
-                          self.group.read().unwrap().len());
+            thread_trace!("fold action, take current childs: {:?}",
+                          &*self.group.read().unwrap());
 
             self.append_to(groups);
         }

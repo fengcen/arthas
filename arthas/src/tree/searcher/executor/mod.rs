@@ -120,7 +120,9 @@ impl Exectuor {
 
             if need_sort {
                 let mut children = groups_to_children(groups);
+                thread_trace!("children: {:?}", children);
                 sort_children(&mut children[..], &task.orders);
+                thread_trace!("sorted children: {:?}", children);
                 return Ok(filter_children(children, &task, &field_sub));
             } else {
                 return Ok(filter_groups(groups, &task, &field_sub));
@@ -143,6 +145,9 @@ fn filter_groups(groups: Groups,
     let is_count = task.query_type == QueryType::Count;
 
     'outer: for group in groups {
+        thread_trace!("filter groups, current group: {:?}",
+                      &*group.read().unwrap());
+
         if other_conditions_exists {
             thread_trace!("other conditions exists");
             for rc_child in group.read().unwrap().values() {
