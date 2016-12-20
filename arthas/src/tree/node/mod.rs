@@ -57,18 +57,33 @@ impl Node {
         match self._type {
             DataType::Number | DataType::String => {
                 if Math::gt(&rc_child.read().unwrap().get_value(), &self.get_value()) {
+                    if *is_min {
+                        thread_trace!("found gt, cancel min");
+                        *is_min = false;
+                    }
+
                     if self.right.is_some() {
+                        thread_trace!("continue insert right");
                         self.insert_continue_right(field_int, id, rc_child, is_min, is_max)
                     } else {
+                        thread_trace!("set right node");
                         self.set_right(field_int, id, rc_child, is_max)
                     }
                 } else if Math::lt(&rc_child.read().unwrap().get_value(), &self.get_value()) {
+                    if *is_max {
+                        thread_trace!("found lt, cancel max");
+                        *is_max = false;
+                    }
+
                     if self.left.is_some() {
+                        thread_trace!("continue insert left");
                         self.insert_continue_left(field_int, id, rc_child, is_min, is_max)
                     } else {
+                        thread_trace!("set left node");
                         self.set_left(field_int, id, rc_child, is_min)
                     }
                 } else {
+                    thread_trace!("found group, insert to current");
                     self.insert_to_current(field_int, id, rc_child);
                     *is_min = false;
                     *is_max = false;
@@ -99,10 +114,6 @@ impl Node {
                              is_min: &mut bool,
                              is_max: &mut bool)
                              -> Option<RcNode> {
-        if *is_min {
-            *is_min = false;
-        }
-
         self.right
             .as_mut()
             .unwrap()
@@ -118,10 +129,6 @@ impl Node {
                             is_min: &mut bool,
                             is_max: &mut bool)
                             -> Option<RcNode> {
-        if *is_max {
-            *is_max = false;
-        }
-
         self.left
             .as_mut()
             .unwrap()

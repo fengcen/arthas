@@ -1,14 +1,17 @@
-#![feature(plugin, test)]
+#![feature(plugin, custom_derive, proc_macro, test)]
 #![plugin(arthas_plugin)]
 
+#[macro_use]
+extern crate serde_derive;
 extern crate test;
 extern crate rand;
 extern crate arthas;
-extern crate model;
 extern crate env_logger;
 
 #[path = "../tests/common/mod.rs"]
 pub mod common;
+#[path = "../tests/model/mod.rs"]
+pub mod model;
 
 use model::*;
 use common::memory_setup;

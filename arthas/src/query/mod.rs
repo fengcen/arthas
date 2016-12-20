@@ -165,22 +165,6 @@ impl<'a, T: Structure> Query<'a, T> {
     }
 
     /// Insert an item.
-    ///
-    /// # Examples
-    /// ```
-    /// extern crate arthas;
-    /// extern crate model;  // `model` crate can be found in the `examples` directory.
-    ///
-    /// use arthas::prelude::*;
-    /// use model::Article;
-    ///
-    /// fn main() {
-    ///     // Disable persistence for the tests.
-    ///     arthas::config::persistence(false);
-    ///
-    ///     Article::session().insert(Article::new("Hello world!")).unwrap();
-    /// }
-    /// ```
     pub fn insert(mut self, item: T) -> Result<Id, Error> {
         self.item = Some(item);
         let store = self.prepare(Action::Insert)?;
@@ -188,57 +172,12 @@ impl<'a, T: Structure> Query<'a, T> {
     }
 
     /// Remove item.
-    ///
-    /// # Examples
-    /// ```
-    /// extern crate arthas;
-    /// extern crate model;  // `model` crate can be found in the `examples` directory.
-    ///
-    /// use arthas::prelude::*;
-    /// use model::Article;
-    ///
-    /// fn main() {
-    ///     // Disable persistence for the tests.
-    ///     arthas::config::persistence(false);
-    ///
-    ///     let id = Article::session().insert(Article::new("Hello world!")).unwrap();
-    ///
-    ///     // Remove item by id.
-    ///     Article::session().id(&id).remove().unwrap();
-    ///
-    ///     let item = Article::session().id(&id).find_one().unwrap();
-    ///     assert!(item.is_none());
-    /// }
-    /// ```
     pub fn remove(mut self) -> Result<Vec<T>, Error> {
         let store = self.prepare(Action::Remove)?;
         exec_query!(store, write, delete, self)
     }
 
     /// Update items.
-    ///
-    /// # Examples
-    /// ```
-    /// extern crate arthas;
-    /// extern crate model;  // `model` crate can be found in the `examples` directory.
-    ///
-    /// use arthas::prelude::*;
-    /// use model::Article;
-    ///
-    /// fn main() {
-    ///     // Disable persistence for the tests.
-    ///     arthas::config::persistence(false);
-    ///
-    ///     let id = Article::session().insert(Article::new("Hello world!")).unwrap();
-    ///
-    ///     // Update item with a closure.
-    ///     Article::session().id(&id).update(|article|article.title = "New title!".to_owned()).unwrap();
-    ///
-    ///     let item = Article::session().id(&id).find_one().unwrap();
-    ///     assert!(item.is_some());
-    ///     assert_eq!(item.unwrap().title, "New title!");
-    /// }
-    /// ```
     pub fn update<F>(mut self, updater: F) -> Result<usize, Error>
         where F: Fn(&mut T) + 'a
     {
@@ -248,32 +187,6 @@ impl<'a, T: Structure> Query<'a, T> {
     }
 
     /// Replace an item.
-    ///
-    /// # Examples
-    /// ```
-    /// extern crate arthas;
-    /// extern crate model;  // `model` crate can be found in the `examples` directory.
-    ///
-    /// use arthas::prelude::*;
-    /// use model::Article;
-    ///
-    /// fn main() {
-    ///     // Disable persistence for the tests.
-    ///     arthas::config::persistence(false);
-    ///
-    ///     let id = Article::session().insert(Article::new("Hello world!")).unwrap();
-    ///     let mut item = Article::session().id(&id).find_one().unwrap().unwrap();
-    ///
-    ///     item.title = "New title!".to_owned();
-    ///
-    ///     // Replace item with the new one.
-    ///     Article::session().replace(item).unwrap();
-    ///
-    ///     let new_item = Article::session().id(&id).find_one().unwrap();
-    ///     assert!(new_item.is_some());
-    ///     assert_eq!(new_item.unwrap().title, "New title!");
-    /// }
-    /// ```
     pub fn replace(mut self, item: T) -> Result<(), Error> {
         self.item = Some(item);
         let store = self.prepare(Action::Replace)?;
@@ -281,81 +194,18 @@ impl<'a, T: Structure> Query<'a, T> {
     }
 
     /// Find items.
-    ///
-    /// # Examples
-    /// ```
-    /// extern crate arthas;
-    /// extern crate model;  // `model` crate can be found in the `examples` directory.
-    ///
-    /// use arthas::prelude::*;
-    /// use model::Article;
-    ///
-    /// fn main() {
-    ///     // Disable persistence for the tests.
-    ///     arthas::config::persistence(false);
-    ///
-    ///     Article::session().insert(Article::new("Find me!")).unwrap();
-    ///     Article::session().insert(Article::new("Find me!")).unwrap();
-    ///
-    ///     let items = Article::session().field("title").eq("Find me!").find().unwrap();
-    ///
-    ///     assert!(items.len() == 2);
-    /// }
-    /// ```
     pub fn find(mut self) -> Result<Vec<T>, Error> {
         let store = self.prepare(Action::Find)?;
         exec_query!(store, read, find, self)
     }
 
     /// Find only one item.
-    ///
-    /// # Examples
-    /// ```
-    /// extern crate arthas;
-    /// extern crate model;  // `model` crate can be found in the `examples` directory.
-    ///
-    /// use arthas::prelude::*;
-    /// use model::Article;
-    ///
-    /// fn main() {
-    ///     // Disable persistence for the tests.
-    ///     arthas::config::persistence(false);
-    ///
-    ///     Article::session().insert(Article::new("Find one!")).unwrap();
-    ///     Article::session().insert(Article::new("Find one!")).unwrap();
-    ///
-    ///     let item = Article::session().field("title").eq("Find one!").find_one().unwrap();
-    ///
-    ///     assert!(item.is_some());
-    /// }
-    /// ```
     pub fn find_one(mut self) -> Result<Option<T>, Error> {
         let store = self.prepare(Action::FindOne)?;
         exec_query!(store, read, find_one, self)
     }
 
     /// Count items.
-    ///
-    /// # Examples
-    /// ```
-    /// extern crate arthas;
-    /// extern crate model;  // `model` crate can be found in the `examples` directory.
-    ///
-    /// use arthas::prelude::*;
-    /// use model::Article;
-    ///
-    /// fn main() {
-    ///     // Disable persistence for the tests.
-    ///     arthas::config::persistence(false);
-    ///
-    ///     Article::session().insert(Article::new("Count!")).unwrap();
-    ///     Article::session().insert(Article::new("Count!")).unwrap();
-    ///
-    ///     let count = Article::session().field("title").eq("Count!").count().unwrap();
-    ///
-    ///     assert_eq!(count, 2);
-    /// }
-    /// ```
     pub fn count(mut self) -> Result<usize, Error> {
         let store = self.prepare(Action::Count)?;
         self.orders.clear();
@@ -422,12 +272,14 @@ impl<'a, T: Structure> Query<'a, T> {
 impl<'a, T: Structure> fmt::Debug for Query<'a, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,
-               "{{ item: {:?}, id: {:?}, limit: {:?}, field: {:?}, conditions: {:?} }}",
+               "{{ item: {:?}, id: {:?}, limit: {:?}, field: {:?}, conditions: {:?}, orders: {:?} \
+                }}",
                self.item,
                self.id,
                self.limit,
                self.field,
-               self.conditions)
+               self.conditions,
+               self.orders)
     }
 }
 

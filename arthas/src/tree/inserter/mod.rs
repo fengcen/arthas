@@ -33,10 +33,15 @@ impl Inserter {
                                 &mut is_max);
 
                     if node_option.is_some() {
+                        let rc_node = node_option.unwrap();
                         if is_min {
-                            tree.min.insert(field_int, node_option.unwrap());
+                            thread_trace!("found min node: {:?}",
+                                          rc_node.read().unwrap().get_value());
+                            tree.min.insert(field_int, rc_node);
                         } else if is_max {
-                            tree.max.insert(field_int, node_option.unwrap());
+                            thread_trace!("found max node: {:?}",
+                                          rc_node.read().unwrap().get_value());
+                            tree.max.insert(field_int, rc_node);
                         } else {
                             unreachable!()
                         }

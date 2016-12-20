@@ -1,8 +1,4 @@
-#![feature(proc_macro, plugin, custom_derive)]
-#![plugin(arthas_plugin)]
 
-#[macro_use]
-extern crate serde_derive;
 extern crate serde_json;
 extern crate arthas;
 

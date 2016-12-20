@@ -1,12 +1,14 @@
-#![feature(plugin)]
+#![feature(plugin, custom_derive, proc_macro)]
 #![plugin(arthas_plugin)]
 
+#[macro_use]
+extern crate serde_derive;
 extern crate rand;
 extern crate arthas;
-extern crate model;
 extern crate env_logger;
 
 pub mod common;
+pub mod model;
 
 use model::*;
 use arthas::Error;

@@ -1,14 +1,16 @@
-#![feature(plugin)]
+#![feature(plugin, custom_derive, proc_macro)]
 #![plugin(arthas_plugin)]
 
 extern crate rand;
 extern crate arthas;
-extern crate model;
+#[macro_use]
+extern crate serde_derive;
 #[macro_use]
 extern crate log;
 extern crate env_logger;
 
 pub mod common;
+pub mod model;
 
 use model::*;
 use common::setup;
@@ -181,6 +183,12 @@ fn test_desc() {
 #[test]
 fn test_asc() {
     setup();
+
+    for i in 0..10 {
+        Article::session()
+            .insert(Article::new("Count Asc!").views(i))
+            .unwrap();
+    }
 
     for i in 0..5 {
         Article::session()

@@ -10,6 +10,11 @@ use rand::random;
 use rand::distributions::{IndependentSample, Range};
 use rand::Rng;
 
+use std::collections::HashMap;
+use std::iter::IntoIterator;
+use std::cmp::Eq;
+use std::hash::Hash;
+
 
 pub fn setup() {
     static ONCE: Once = ONCE_INIT;
@@ -51,4 +56,17 @@ fn random_usize_max(max: usize) -> usize {
 
 fn config_env_logger() {
     env_logger::init().unwrap();
+}
+
+pub fn revert<K, V>(hash_map: HashMap<K, V>) -> HashMap<V, K>
+    where HashMap<K, V>: IntoIterator<Item = (K, V)>,
+          V: Eq + Hash
+{
+    let mut reverted_map = HashMap::new();
+
+    for (k, v) in hash_map {
+        reverted_map.insert(v, k);
+    }
+
+    reverted_map
 }

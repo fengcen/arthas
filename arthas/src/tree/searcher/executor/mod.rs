@@ -26,6 +26,7 @@ impl Exectuor {
                 mut task: Task)
                 -> Result<(usize, Vec<*const Value>), Error> {
         if tree.id_map.is_empty() {
+            thread_trace!("tree is empty");
             return Ok(Default::default());
         }
 
@@ -46,13 +47,14 @@ impl Exectuor {
                 match entrance_type {
                     EntranceType::Root => {
                         scope.execute(move || {
-                            thread_trace!("search root");
-
                             let mut groups = Groups::new();
-                            tree.root
+                            let rc_node = tree.root
                                 .get(&sub.field_int)
-                                .unwrap()
-                                .read()
+                                .unwrap();
+                            thread_trace!("search root, root is {:?}",
+                                          rc_node.read().unwrap().get_value());
+
+                            rc_node.read()
                                 .unwrap()
                                 .search_root(stopped, &mut groups, &mut sub);
 

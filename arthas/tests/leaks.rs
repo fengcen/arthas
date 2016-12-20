@@ -1,13 +1,14 @@
-#![feature(plugin, test)]
+#![feature(plugin, custom_derive, proc_macro)]
 #![plugin(arthas_plugin)]
 
-extern crate test;
+#[macro_use]
+extern crate serde_derive;
 extern crate rand;
 extern crate arthas;
-extern crate model;
 extern crate env_logger;
 
 pub mod common;
+pub mod model;
 
 use std::time::Duration;
 use std::thread::sleep;

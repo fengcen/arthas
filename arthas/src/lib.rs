@@ -39,11 +39,28 @@
 //! All struct can use the static method `session()`. `session()` will return a [`Query`](struct.Query.html).
 //!
 //! ```
+//! #![feature(plugin, custom_derive, proc_macro)]
+//! #![plugin(arthas_plugin)]
+//!
+//! #[macro_use]
+//! extern crate serde_derive;
 //! extern crate arthas;
-//! extern crate model;  // `model` crate can be found in the `examples` directory.
 //!
 //! use arthas::prelude::*;
-//! use model::Article;
+//!
+//! #[arthas]
+//! pub struct Article {
+//!     pub _id: String,
+//!     pub title: String,
+//!     pub content: String,
+//!     pub views: usize,
+//! }
+//!
+//! impl Article {
+//!     pub fn new<T: Into<String>>(title: T) -> Article {
+//!         Article { title: title.into(), ..Default::default() }
+//!     }
+//! }
 //!
 //! fn main() {
 //!     // Disable persistence for the tests.
@@ -97,11 +114,6 @@
 #[cfg(test)]
 extern crate test;
 #[cfg(test)]
-#[macro_use]
-extern crate maplit;
-#[cfg(test)]
-extern crate model;
-#[cfg(test)]
 extern crate env_logger;
 
 #[macro_use]
@@ -128,7 +140,8 @@ extern crate vec_map;
 
 #[macro_use]
 mod macros;
-mod encoder;
+#[doc(hidden)]
+pub mod encoder;
 mod memory;
 mod persistence;
 mod store;
