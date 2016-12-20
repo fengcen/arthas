@@ -17,7 +17,7 @@ pub trait Math {
 
 impl Math for Value {
     fn eq(&self, value: &Value) -> bool {
-        thread_trace!("current: {:?}, find: {:?}", self, value);
+        thread_trace!("math eq, current: {:?}, find: {:?}", self, value);
 
         if self.is_number() && value.is_number() {
             self.get_f64() == value.get_f64()
@@ -27,6 +27,8 @@ impl Math for Value {
     }
 
     fn ne(&self, value: &Value) -> bool {
+        thread_trace!("math ne, current: {:?}, find: {:?}", self, value);
+
         if self.is_number() && value.is_number() {
             self.get_f64() != value.get_f64()
         } else {
@@ -35,6 +37,8 @@ impl Math for Value {
     }
 
     fn gt(&self, value: &Value) -> bool {
+        thread_trace!("math gt, current: {:?}, find: {:?}", self, value);
+
         if self.is_number() && value.is_number() {
             self.get_f64() > value.get_f64()
         } else if self.is_string() && value.is_string() {
@@ -45,6 +49,8 @@ impl Math for Value {
     }
 
     fn lt(&self, value: &Value) -> bool {
+        thread_trace!("math lt, current: {:?}, find: {:?}", self, value);
+
         if self.is_number() && value.is_number() {
             self.get_f64() < value.get_f64()
         } else if self.is_string() && value.is_string() {
@@ -55,6 +61,8 @@ impl Math for Value {
     }
 
     fn ge(&self, value: &Value) -> bool {
+        thread_trace!("math ge, current: {:?}, find: {:?}", self, value);
+
         if self.is_number() && value.is_number() {
             self.get_f64() >= value.get_f64()
         } else if self.is_string() && value.is_string() {
@@ -65,6 +73,8 @@ impl Math for Value {
     }
 
     fn le(&self, value: &Value) -> bool {
+        thread_trace!("math le, current: {:?}, find: {:?}", self, value);
+
         if self.is_number() && value.is_number() {
             self.get_f64() <= value.get_f64()
         } else if self.is_string() && value.is_string() {
@@ -75,6 +85,8 @@ impl Math for Value {
     }
 
     fn cmp(&self, value: &Value, order: &Order) -> Ordering {
+        thread_trace!("math cmp, current: {:?}, find: {:?}", self, value);
+
         if let Order::Desc = *order {
             if Math::eq(self, value) {
                 Ordering::Equal

@@ -17,7 +17,7 @@ use common::setup;
 
 
 #[test]
-fn test_insert() {
+fn test_a_insert() {
     setup();
 
     let id = Article::session().insert(Article::new("Hello world!")).unwrap();
@@ -27,7 +27,7 @@ fn test_insert() {
 }
 
 #[test]
-fn test_insert_random() {
+fn test_a_insert_random() {
     setup();
 
     Article::session()
@@ -183,12 +183,6 @@ fn test_desc() {
 #[test]
 fn test_asc() {
     setup();
-
-    for i in 0..10 {
-        Article::session()
-            .insert(Article::new("Count Asc!").views(i))
-            .unwrap();
-    }
 
     for i in 0..5 {
         Article::session()

@@ -12,11 +12,15 @@ impl Inserter {
         let rc_item = RcItem::new(id.clone(), value);
         tree.id_map.insert(id.clone(), rc_item.clone());
         let datas = rc_item.read().unwrap().datas.clone();
-        let mut is_min = true;
-        let mut is_max = true;
 
         for (field_int, rc_data) in datas {
             if rc_data.read().unwrap().can_index() {
+                let mut is_min = true;
+                let mut is_max = true;
+
+                thread_trace!("current insert field data: {:?}",
+                              rc_data.read().unwrap().get_value());
+
                 let rc_child = RcChild::new(rc_data, rc_item.clone());
                 let root_exists = tree.root.contains_key(&field_int);
 

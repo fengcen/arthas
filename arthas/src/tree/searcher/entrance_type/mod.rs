@@ -40,6 +40,12 @@ impl EntranceType {
             let root_rate = get_rate(root.unwrap(), value);
             let min_rate = get_rate(min.unwrap(), value);
             let max_rate = get_rate(max.unwrap(), value);
+
+            thread_trace!("entrance type, root rate: {:?}, min rate: {:?}, max rate: {:?}",
+                          root_rate,
+                          min_rate,
+                          max_rate);
+
             let maximum = vec![root_rate, min_rate, max_rate]
                 .into_iter()
                 .fold(0.0, |a, b| if a > b { a } else { b });

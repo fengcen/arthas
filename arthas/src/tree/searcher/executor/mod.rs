@@ -110,9 +110,13 @@ impl Exectuor {
         let need_sort = task.has_order();
         let stopped_field = get_stopped_field(&field_sub, &task);
 
+        thread_trace!("stopped field: {:?}", stopped_field);
+
         if field_groups.contains_key(&stopped_field) {
             field_sub.remove(&stopped_field);
             let groups = field_groups.remove(&stopped_field).unwrap();
+
+            thread_trace!("wait for filter, groups len: {:?}", groups.len());
 
             if need_sort {
                 let mut children = groups_to_children(groups);
@@ -121,9 +125,9 @@ impl Exectuor {
             } else {
                 return Ok(filter_groups(groups, &task, &field_sub));
             }
+        } else {
+            unreachable!()
         }
-
-        Ok(Default::default())
     }
 }
 
@@ -140,6 +144,7 @@ fn filter_groups(groups: Groups,
 
     'outer: for group in groups {
         if other_conditions_exists {
+            thread_trace!("other conditions exists");
             for rc_child in group.read().unwrap().values() {
                 if filter_child(rc_child,
                                 &mut found,
@@ -151,9 +156,11 @@ fn filter_groups(groups: Groups,
                 }
             }
         } else if is_count {
+            thread_trace!("only count");
             count += group.read().unwrap().len();
             found = count;
         } else {
+            thread_trace!("no other conditions exists");
             if collect_child(&mut found, &mut count, task, &group, &mut values) {
                 break;
             }
@@ -241,6 +248,9 @@ fn filter_child(rc_child: &RcChild,
     }
 
     if pass {
+        thread_trace!("filter child pass, take: {:?}",
+                      rc_child.read().unwrap().get_value());
+
         *found += 1;
 
         if *found > task.offset {
