@@ -5,8 +5,8 @@ os:
   - osx
 cache: cargo
 script:
-  - (cd arthas && travis-cargo build)
-  - (cd arthas && travis-cargo test)
-  - (cd arthas && travis-cargo test -- --ignore)
-  - (cd arthas && travis-cargo doc)
-  - (cd arthas_plugin && travis-cargo build)
+  - (cd arthas && cargo build)
+  - (cd arthas && cargo test)
+  - (cd arthas && cargo test -- --ignore)
+  - (cd arthas && cargo doc)
+  - (cd arthas_plugin && cargo build)
