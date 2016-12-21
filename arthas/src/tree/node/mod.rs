@@ -236,10 +236,8 @@ impl Node {
             if should_stop {
                 return stop(stopped, sub);
             }
-        } else {
-            if !stopped.load(Ordering::SeqCst) {
-                return stop(stopped, sub);
-            }
+        } else if !stopped.load(Ordering::SeqCst) {
+            return stop(stopped, sub);
         }
     }
 
@@ -264,10 +262,8 @@ impl Node {
             if should_stop && !stopped.load(Ordering::SeqCst) {
                 return stop(stopped, sub);
             }
-        } else {
-            if !stopped.load(Ordering::SeqCst) {
-                return stop(stopped, sub);
-            }
+        } else if !stopped.load(Ordering::SeqCst) {
+            return stop(stopped, sub);
         }
     }
 

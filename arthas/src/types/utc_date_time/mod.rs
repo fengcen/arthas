@@ -2,7 +2,7 @@
 use chrono::*;
 
 
-/// UTC DateTime.
+/// UTC Date Time.
 pub struct UtcDateTime(DateTime<UTC>);
 
 impl UtcDateTime {

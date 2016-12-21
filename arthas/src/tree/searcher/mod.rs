@@ -90,12 +90,9 @@ impl Searcher {
                 values.push(rc_item.read().unwrap().get_pointer());
             }
 
-            if query.limit.is_some() {
-                if count >= *query.limit.as_ref().unwrap() {
-                    break;
-                }
+            if query.limit.is_some() && count >= *query.limit.as_ref().unwrap() {
+                break;
             }
-
         }
 
         Ok((count, values))

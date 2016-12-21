@@ -1,6 +1,7 @@
 
 Arthas
 ======
+[![Build Status](https://travis-ci.org/fengcen/arthas.svg?branch=master)](https://travis-ci.org/fengcen/arthas)
 [![status](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![docs](https://docs.rs/arthas/badge.svg?version=0.1.0)](https://docs.rs/arthas)
 

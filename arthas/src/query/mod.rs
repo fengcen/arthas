@@ -52,7 +52,6 @@ use self::action::Action;
 
 
 pub type Updater<'a, T> = Box<Fn(&mut T) + 'a>;
-pub type Filter<'a, T> = Box<Fn(&T) -> bool + 'a>;
 
 /// Query.
 #[derive(Default)]

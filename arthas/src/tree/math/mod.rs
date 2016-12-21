@@ -97,16 +97,14 @@ impl Math for Value {
             } else {
                 panic!("Unsupported math type");
             }
+        } else if Math::eq(self, value) {
+            Ordering::Equal
+        } else if Math::lt(self, value) {
+            Ordering::Less
+        } else if Math::gt(self, value) {
+            Ordering::Greater
         } else {
-            if Math::eq(self, value) {
-                Ordering::Equal
-            } else if Math::lt(self, value) {
-                Ordering::Less
-            } else if Math::gt(self, value) {
-                Ordering::Greater
-            } else {
-                panic!("Unsupported math type");
-            }
+            panic!("Unsupported math type");
         }
     }
 

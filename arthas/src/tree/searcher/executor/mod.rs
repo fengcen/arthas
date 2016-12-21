@@ -123,9 +123,9 @@ impl Exectuor {
                 thread_trace!("children: {:?}", children);
                 sort_children(&mut children[..], &task.orders);
                 thread_trace!("sorted children: {:?}", children);
-                return Ok(filter_children(children, &task, &field_sub));
+                Ok(filter_children(children, &task, &field_sub))
             } else {
-                return Ok(filter_groups(groups, &task, &field_sub));
+                Ok(filter_groups(groups, &task, &field_sub))
             }
         } else {
             unreachable!()
@@ -197,10 +197,8 @@ fn collect_child(found: &mut usize,
             *count += 1;
             values.push(rc_child.read().unwrap().get_item_pointer());
 
-            if task.limit.is_some() {
-                if *count >= *task.limit.as_ref().unwrap() {
-                    return true;
-                }
+            if task.limit.is_some() && *count >= *task.limit.as_ref().unwrap() {
+                return true;
             }
         }
     }
@@ -263,10 +261,8 @@ fn filter_child(rc_child: &RcChild,
             values.push(rc_child.read().unwrap().get_item_pointer());
         }
 
-        if task.limit.is_some() {
-            if *count >= *task.limit.as_ref().unwrap() {
-                return true;
-            }
+        if task.limit.is_some() && *count >= *task.limit.as_ref().unwrap() {
+            return true;
         }
     }
 
