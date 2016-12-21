@@ -1,0 +1,12 @@
+language: rust
+rust: nightly
+os:
+  - linux
+  - osx
+cache: cargo
+script:
+  - (cd arthas && travis-cargo build)
+  - (cd arthas && travis-cargo test)
+  - (cd arthas && travis-cargo test -- --ignore)
+  - (cd arthas && travis-cargo doc)
+  - (cd arthas_plugin && travis-cargo build)
