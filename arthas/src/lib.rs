@@ -14,7 +14,7 @@
 //! 2. In your `main.rs` or `lib.rs`:
 //!
 //!     ```html
-//!     #![feature(proc_macro, plugin, custom_derive)]
+//!     #![feature(plugin, custom_derive)]
 //!     #![plugin(arthas_plugin)]
 //!
 //!     #[macro_use]
@@ -39,7 +39,7 @@
 //! All struct can use the static method `session()`. `session()` will return a [`Query`](struct.Query.html).
 //!
 //! ```
-//! #![feature(plugin, custom_derive, proc_macro)]
+//! #![feature(plugin, custom_derive)]
 //! #![plugin(arthas_plugin)]
 //!
 //! #[macro_use]
@@ -107,7 +107,7 @@
 //! }
 //! ```
 //!
-#![feature(core_intrinsics, proc_macro)]
+#![feature(core_intrinsics)]
 #![cfg_attr(all(test), feature(test))]
 #![deny(missing_docs)]
 

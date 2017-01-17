@@ -1,6 +1,6 @@
 [package]
 name = "arthas"
-version = "0.1.0"
+version = "0.1.1"
 description = "Arthas is an in-memory structure database."
 keywords = ["database", "in-memory", "structure", "db", "embedded"]
 authors = ["fengcen <fengcen.love@gmail.com>"]

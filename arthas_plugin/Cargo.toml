@@ -1,6 +1,6 @@
 [package]
 name = "arthas_plugin"
-version = "0.1.0"
+version = "0.1.1"
 description = "Compiler plugin for Arthas."
 keywords = ["database", "in-memory", "structure", "db", "embedded"]
 authors = ["fengcen <fengcen.love@gmail.com>"]

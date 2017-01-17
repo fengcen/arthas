@@ -1,4 +1,4 @@
-#![feature(plugin, custom_derive, proc_macro, test)]
+#![feature(plugin, custom_derive, test)]
 #![plugin(arthas_plugin)]
 
 #[macro_use]

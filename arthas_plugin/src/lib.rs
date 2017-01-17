@@ -137,6 +137,7 @@ pub fn arthas(cx: &mut ExtCtxt,
                 ident: utils::to_spanned(utils::to_ident(ident)),
                 span: DUMMY_SP,
                 is_shorthand: false,
+                attrs: ThinVec::new(),
                 expr: P(Expr {
                     id: DUMMY_NODE_ID,
                     span: DUMMY_SP,
@@ -160,6 +161,7 @@ pub fn arthas(cx: &mut ExtCtxt,
             deep_struct_fields.push(Field {
                 ident: utils::to_spanned(utils::to_ident(ident)),
                 span: DUMMY_SP,
+                attrs: ThinVec::new(),
                 is_shorthand: false,
                 expr: P(Expr {
                     id: DUMMY_NODE_ID,
@@ -182,6 +184,7 @@ pub fn arthas(cx: &mut ExtCtxt,
             deep_struct_fields.push(Field {
                 ident: utils::to_spanned(utils::to_ident(ident)),
                 span: DUMMY_SP,
+                attrs: ThinVec::new(),
                 is_shorthand: false,
                 expr: P(Expr {
                     id: DUMMY_NODE_ID,

@@ -36,7 +36,7 @@ serde_derive = "^0.8"
 In your `main.rs` or `lib.rs`:
 
 ```rust
-#![feature(proc_macro, plugin, custom_derive)]
+#![feature(plugin, custom_derive)]
 #![plugin(arthas_plugin)]
 
 #[macro_use]
