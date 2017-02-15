@@ -3,7 +3,7 @@ Arthas
 ======
 [![Build Status](https://travis-ci.org/fengcen/arthas.svg?branch=master)](https://travis-ci.org/fengcen/arthas)
 [![status](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
-[![docs](https://docs.rs/arthas/badge.svg?version=0.1.0)](https://docs.rs/arthas)
+[![docs](https://docs.rs/arthas/badge.svg?version=0.2.0)](https://docs.rs/arthas)
 
 Arthas is an in-memory structure database.
 
@@ -28,9 +28,9 @@ Add dependencies to Cargo.toml
 
 ```toml
 [dependencies]
-arthas = "^0.1"
+arthas = "^0.2"
 arthas_plugin = "^0.1"
-serde_derive = "^0.8"
+serde_derive = "^0.9"
 ```
 
 In your `main.rs` or `lib.rs`:

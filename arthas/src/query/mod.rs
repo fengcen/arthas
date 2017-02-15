@@ -45,7 +45,7 @@ use error::Error;
 use std::fmt;
 use tree::comparision::Comparision;
 use tree::cmp::Cmp;
-use serde_json::to_value;
+use to_value;
 use serde::Serialize;
 use traits::get_unique_int_str;
 use self::action::Action;

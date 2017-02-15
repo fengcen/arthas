@@ -1,6 +1,5 @@
 
-use std::collections::BTreeMap;
-use serde_json::Value;
+use serde_json::{self, Value};
 use traits::FieldIntMap;
 use std::iter::IntoIterator;
 use bincode::SizeLimit;
@@ -23,12 +22,12 @@ enum Action {
 fn handle_wrapper(action: Action, value: &Value, field_int_map: &FieldIntMap) -> Value {
     if value.is_object() {
         let handled = match action {
-            Action::Encode => encode(value.find("item").unwrap(), field_int_map),
-            Action::Decode => decode(value.find("item").unwrap(), field_int_map),
+            Action::Encode => encode(value.get("item").unwrap(), field_int_map),
+            Action::Decode => decode(value.get("item").unwrap(), field_int_map),
         };
 
-        let mut map = BTreeMap::new();
-        map.insert("id".to_owned(), value.find("id").unwrap().to_owned());
+        let mut map = serde_json::Map::new();
+        map.insert("id".to_owned(), value.get("id").unwrap().to_owned());
         map.insert("item".to_owned(), handled);
         Value::Object(map)
     } else {
@@ -37,7 +36,7 @@ fn handle_wrapper(action: Action, value: &Value, field_int_map: &FieldIntMap) ->
 }
 
 pub fn encode(value: &Value, field_int_map: &FieldIntMap) -> Value {
-    let mut output = Value::Object(BTreeMap::new());
+    let mut output = Value::Object(serde_json::Map::new());
 
     for (path, integer) in field_int_map {
         encode_segments(path,
@@ -79,12 +78,12 @@ fn encode_segments<'a>(path: &str,
             }
         }
     } else if current_path.join(".") == path {
-        *current_output = current_input.find(segment).unwrap().clone();
+        *current_output = current_input.get(segment).unwrap().clone();
     } else {
         encode_segments(path,
                         segments,
                         current_path,
-                        current_input.find(segment).unwrap(),
+                        current_input.get(segment).unwrap(),
                         current_output);
     }
 
@@ -93,7 +92,7 @@ fn encode_segments<'a>(path: &str,
 }
 
 pub fn decode(value: &Value, int_field_map: &FieldIntMap) -> Value {
-    let mut output = Value::Object(BTreeMap::new());
+    let mut output = Value::Object(serde_json::Map::new());
     let path_value = replace_integer(value, int_field_map);
 
     for (path, input) in path_value.as_object().unwrap() {
@@ -137,7 +136,7 @@ fn decode_segments<'a>(path: &str,
                                 object_entry_value_mut(current_output, field));
             }
         } else {
-            *current_output = Value::Object(BTreeMap::new());
+            *current_output = Value::Object(serde_json::Map::new());
         }
     } else if current_path.join(".") == path {
         object_insert(current_output, segment, current_input);
@@ -165,7 +164,7 @@ pub fn bin_decode<T: AsRef<[u8]>>(input: T) -> String {
 
 #[inline]
 fn replace_integer(value: &Value, int_field_map: &FieldIntMap) -> Value {
-    let mut map = BTreeMap::new();
+    let mut map = serde_json::Map::new();
 
     for (integer, value) in value.as_object().unwrap() {
         map.insert(int_field_map.get(integer).cloned().unwrap(), value.clone());
@@ -183,7 +182,11 @@ fn get_path_segments(path: &str) -> Vec<&str> {
 #[inline]
 fn object_entry<'a>(object: &'a mut Value, field: &str) -> &'a mut Value {
     if let Value::Object(ref mut map) = *object {
-        map.entry(field.to_owned()).or_insert(Value::Null)
+        if !map.contains_key(field) {
+            map.insert(field.to_owned(), Value::Null);
+        }
+
+        map.get_mut(field).unwrap()
     } else {
         unreachable!()
     }
@@ -206,7 +209,7 @@ fn array_get_value_mut(array: &mut Value, index: usize) -> &mut Value {
 
     if let Value::Array(ref mut vec) = *array {
         if vec.get(index).is_none() {
-            vec.push(Value::Object(BTreeMap::new()));
+            vec.push(Value::Object(serde_json::Map::new()));
         }
 
         &mut vec[index]
@@ -218,11 +221,15 @@ fn array_get_value_mut(array: &mut Value, index: usize) -> &mut Value {
 #[inline]
 fn object_entry_value_mut<'a>(object: &'a mut Value, field: &str) -> &'a mut Value {
     if object.as_object().is_none() {
-        *object = Value::Object(BTreeMap::new());
+        *object = Value::Object(serde_json::Map::new());
     }
 
     if let Value::Object(ref mut map) = *object {
-        map.entry(field.to_owned()).or_insert_with(|| Value::Object(BTreeMap::new()))
+        if !map.contains_key(field) {
+            map.insert(field.to_owned(), Value::Object(serde_json::Map::new()));
+        }
+
+        map.get_mut(field).unwrap()
     } else {
         unreachable!()
     }

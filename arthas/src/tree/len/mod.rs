@@ -1,5 +1,5 @@
 
-use serde_json::Value;
+use serde_json::{self, Value};
 use super::rc::RcData;
 
 
@@ -28,5 +28,5 @@ impl Len for Value {
 
 #[inline]
 fn create_rc_data_by_usize(len: usize) -> Option<RcData> {
-    Some(RcData::new(Box::into_raw(Box::new(Value::U64(len as u64)))))
+    Some(RcData::new(Box::into_raw(Box::new(Value::Number(serde_json::Number::from(len))))))
 }

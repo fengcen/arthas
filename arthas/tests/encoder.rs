@@ -15,7 +15,7 @@ pub mod model;
 pub mod common;
 
 use std::collections::HashMap;
-use serde_json::to_value;
+use arthas::to_value;
 use arthas::encoder::{encode, decode};
 use arthas::traits::get_unique_int_str;
 use common::revert;

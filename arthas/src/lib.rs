@@ -6,9 +6,9 @@
 //!
 //!     ```html
 //!     [dependencies]
-//!     arthas = "^0.1"
+//!     arthas = "^0.2"
 //!     arthas_plugin = "^0.1"
-//!     serde_derive = "^0.8"
+//!     serde_derive = "^0.9"
 //!     ```
 //!
 //! 2. In your `main.rs` or `lib.rs`:
@@ -168,6 +168,11 @@ pub mod config;
 /// Load persistence.
 pub fn load<T: traits::Structure>() {
     loader::load::<T>();
+}
+
+/// Convert variable to `serde_json::Value`.
+pub fn to_value<S: serde::Serialize>(value: S) -> serde_json::Value {
+    serde_json::to_value(value).unwrap()
 }
 
 

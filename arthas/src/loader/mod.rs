@@ -7,7 +7,8 @@ use std::io::BufReader;
 use std::io::BufRead;
 use std::fs::{self, File};
 use memmap::{Mmap, Protection};
-use serde_json::{self, Value, to_value};
+use serde_json::{self, Value};
+use to_value;
 use persistence::operation::Operation;
 use traits::{FieldIntMap, RenameMap};
 use encoder::{bin_encode, bin_decode};
@@ -55,7 +56,7 @@ pub fn load<T: Structure>() {
     let persistence_option = load_persistence(&struct_name,
                                               &field_int_map,
                                               &rename_map,
-                                              &serde_json::to_value(T::new_deep_empty()));
+                                              &to_value(T::new_deep_empty()));
 
     if persistence_option.is_some() {
         *persistence = persistence_option.unwrap();

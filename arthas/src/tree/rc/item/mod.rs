@@ -65,7 +65,7 @@ impl Item {
         if value.is_object() {
             let mut datas = HashMap::new();
 
-            for (field_int, value) in value.find("item").unwrap().as_object().unwrap() {
+            for (field_int, value) in value.get("item").unwrap().as_object().unwrap() {
                 if field_int != &*_ID_INT_STR {
                     datas.insert(field_int.to_owned(), RcData::new(value as *const Value));
 
