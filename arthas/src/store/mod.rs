@@ -8,19 +8,19 @@ use std::path::PathBuf;
 use self::config::Config;
 use memory::Memory;
 use persistence::Persistence;
-use utils;
+use traits::Structure;
 
 
 pub type MemoryStore = HashMap<String, RwLock<Memory>>;
 pub type PersistenceStore = HashMap<String, RwLock<Persistence>>;
 
 pub trait MemoryGetter {
-    fn get_memory<T: 'static>(&self) -> &RwLock<Memory>;
+    fn get_memory<T: Structure>(&self) -> &RwLock<Memory>;
 }
 
 impl MemoryGetter for MemoryStore {
-    fn get_memory<T: 'static>(&self) -> &RwLock<Memory> {
-        self.get(&utils::reflect::get_type_name::<T>()).unwrap()
+    fn get_memory<T: Structure>(&self) -> &RwLock<Memory> {
+        self.get(&T::get_struct_name()).unwrap()
     }
 }
 

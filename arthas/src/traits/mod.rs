@@ -3,7 +3,8 @@ use std::collections::HashMap;
 use item::Id;
 use query::Query;
 
-pub trait Schema: Sized {
+pub trait Arthas: Sized {
+    fn get_struct_name() -> String;
     fn session<'a>() -> Query<'a, Self>;
     fn get_field_type_map() -> FieldTypeMap;
     fn get_field_int_map() -> FieldIntMap;
@@ -13,10 +14,7 @@ pub trait Schema: Sized {
     fn has_id() -> bool;
     fn set_id(&mut self, id: Id);
     fn get_id(&self) -> Id;
-}
-
-pub trait SchemaRename {
-    fn get_rename_map() -> RenameMap;
+    fn get_rename_map() -> HashMap<String, String>;
 }
 
 pub type FieldTypeMap = HashMap<String, FieldType>;
@@ -35,10 +33,10 @@ use serde::{Serialize, Deserialize};
 use std::fmt::Debug;
 
 pub trait Structure
-    : 'static + Serialize + Deserialize + Default + Clone + Debug + PartialEq + Send + Sync + Schema + SchemaRename
+    : 'static + Serialize + Deserialize + Default + Clone + Debug + PartialEq + Send + Sync + Arthas
     {
 }
-impl<T: 'static + Serialize + Deserialize + Default + Clone + Debug + PartialEq + Send + Sync + Schema + SchemaRename> Structure for T {}
+impl<T: 'static + Serialize + Deserialize + Default + Clone + Debug + PartialEq + Send + Sync + Arthas> Structure for T {}
 
 pub fn get_unique_int_str(field: &str) -> String {
     let mut integer = 0;

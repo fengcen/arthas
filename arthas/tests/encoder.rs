@@ -1,10 +1,10 @@
-#![feature(plugin, custom_derive, test)]
-#![plugin(arthas_plugin)]
+#![cfg_attr(all(feature = "unstable", test), feature(test))]
 
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate arthas_derive;
 extern crate rand;
-extern crate test;
 extern crate arthas;
 #[macro_use]
 extern crate maplit;
@@ -21,50 +21,6 @@ use arthas::traits::get_unique_int_str;
 use common::revert;
 use model::*;
 
-
-#[bench]
-fn bench_encode(b: &mut test::Bencher) {
-    let title = "This is title".to_owned();
-    let content = "This is content".to_owned();
-    let comment_title = "This is comment title".to_owned();
-    let comment_content = "This is comment content".to_owned();
-    let field_int_map = Article::get_field_int_map();
-
-    let value = to_value(Article {
-        _id: String::new(),
-        title: title.clone(),
-        content: content.clone(),
-        day_to_views: HashMap::new(),
-        views: 0,
-        comments: vec![Comment {
-                           title: comment_title.clone(),
-                           content: comment_content.clone(),
-                       }],
-    });
-
-    b.iter(|| encode(&value, &field_int_map))
-}
-
-#[bench]
-fn bench_decode(b: &mut test::Bencher) {
-    let title = "This is title".to_owned();
-    let content = "This is content".to_owned();
-    let comment_title = "This is comment title".to_owned();
-    let comment_content = "This is comment content".to_owned();
-    let int_field_map = revert(Article::get_field_int_map());
-
-    let value = to_value(hashmap!{
-            get_unique_int_str("_id") => to_value(""),
-            get_unique_int_str("title") => to_value(title.clone()),
-            get_unique_int_str("content") => to_value(content.clone()),
-            get_unique_int_str("day_to_views") => to_value(HashMap::<String, usize>::new()),
-            get_unique_int_str("views") => to_value(0),
-            get_unique_int_str("comments.[].title") => to_value(vec![comment_title.clone()]),
-            get_unique_int_str("comments.[].content") => to_value(vec![comment_content.clone()])
-        });
-
-    b.iter(|| decode(&value, &int_field_map))
-}
 
 #[test]
 fn test_atomic() {
@@ -258,4 +214,61 @@ fn test_blog() {
     assert_eq!(encode(&decoded, &Blog::get_field_int_map()), encoded);
     assert_eq!(decode(&encoded, &revert(Blog::get_field_int_map())),
                decoded);
+}
+
+
+#[cfg(all(feature = "unstable", test))]
+mod benches {
+    extern crate test;
+    use arthas::to_value;
+    use arthas::traits::get_unique_int_str;
+    use arthas::encoder::{encode, decode};
+    use model::*;
+    use std::collections::HashMap;
+    use common::revert;
+
+
+    #[bench]
+    fn bench_encode(b: &mut test::Bencher) {
+        let title = "This is title".to_owned();
+        let content = "This is content".to_owned();
+        let comment_title = "This is comment title".to_owned();
+        let comment_content = "This is comment content".to_owned();
+        let field_int_map = Article::get_field_int_map();
+
+        let value = to_value(Article {
+            _id: String::new(),
+            title: title.clone(),
+            content: content.clone(),
+            day_to_views: HashMap::new(),
+            views: 0,
+            comments: vec![Comment {
+                               title: comment_title.clone(),
+                               content: comment_content.clone(),
+                           }],
+        });
+
+        b.iter(|| encode(&value, &field_int_map))
+    }
+
+    #[bench]
+    fn bench_decode(b: &mut test::Bencher) {
+        let title = "This is title".to_owned();
+        let content = "This is content".to_owned();
+        let comment_title = "This is comment title".to_owned();
+        let comment_content = "This is comment content".to_owned();
+        let int_field_map = revert(Article::get_field_int_map());
+
+        let value = to_value(hashmap!{
+            get_unique_int_str("_id") => to_value(""),
+            get_unique_int_str("title") => to_value(title.clone()),
+            get_unique_int_str("content") => to_value(content.clone()),
+            get_unique_int_str("day_to_views") => to_value(HashMap::<String, usize>::new()),
+            get_unique_int_str("views") => to_value(0),
+            get_unique_int_str("comments.[].title") => to_value(vec![comment_title.clone()]),
+            get_unique_int_str("comments.[].content") => to_value(vec![comment_content.clone()])
+        });
+
+        b.iter(|| decode(&value, &int_field_map))
+    }
 }

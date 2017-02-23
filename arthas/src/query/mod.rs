@@ -37,7 +37,6 @@ use std::time::Instant;
 use item::{Id, StructName, get_len_field_int};
 use memory::Memory;
 use traits::Structure;
-use utils;
 use store::{MemoryStore, memories, persistences, is_persistence, MemoryGetter};
 use std::sync::RwLock;
 use persistence::Persistence;
@@ -82,7 +81,7 @@ pub struct Query<'a, T> {
 impl<'a, T: Structure> Query<'a, T> {
     /// Create new query.
     pub fn new() -> Query<'a, T> {
-        Query { struct_name: utils::reflect::get_type_name::<T>(), ..Default::default() }
+        Query { struct_name: T::get_struct_name(), ..Default::default() }
     }
 
     /// Query with id.
@@ -223,7 +222,7 @@ impl<'a, T: Structure> Query<'a, T> {
     }
 
     fn get_memory<'b>(&self) -> Result<RwLockReadGuard<'b, MemoryStore>, Error> {
-        let struct_name = utils::reflect::get_type_name::<T>();
+        let struct_name = T::get_struct_name();
         let store_lock = memories();
 
         if !store_lock.read().unwrap().contains_key(&struct_name) {

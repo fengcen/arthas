@@ -1,5 +1,8 @@
 language: rust
-rust: nightly
+rust:
+  - stable
+  - beta
+  - nightly
 os:
   - linux
   - osx
@@ -8,4 +11,5 @@ script:
   - (cd arthas && cargo build)
   - (cd arthas && cargo test)
   - (cd arthas && cargo doc)
-  - (cd arthas_plugin && cargo build)
+  - (cd arthas_derive && cargo build)
+  - (cd arthas_derive && cargo doc)

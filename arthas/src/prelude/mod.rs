@@ -1,3 +1,3 @@
 //! The Arthas Prelude.
 
-pub use traits::Schema;
+pub use traits::Arthas;

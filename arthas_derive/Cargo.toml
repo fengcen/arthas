@@ -1,7 +1,7 @@
 [package]
-name = "arthas_plugin"
-version = "0.1.1"
-description = "Compiler plugin for Arthas."
+name = "arthas_derive"
+version = "0.1.0"
+description = "Macros 1.1 implementation of #[derive(Arthas)]"
 keywords = ["database", "in-memory", "structure", "db", "embedded"]
 authors = ["fengcen <fengcen.love@gmail.com>"]
 repository = "https://github.com/fengcen/arthas.git"
@@ -10,11 +10,12 @@ documentation = "https://github.com/fengcen/arthas"
 license = "MIT"
 
 [lib]
-name = "arthas_plugin"
+name = "arthas_derive"
 plugin = true
 path = "src/lib.rs"
-crate-type = ["dylib"]
+crate-type = ["proc-macro"]
 
 [dependencies]
+syn = "^0.11"
+quote = "^0.3"
 regex = "^0.1"
-ecp = "^0.1"

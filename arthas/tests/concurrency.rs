@@ -1,8 +1,8 @@
-#![feature(plugin, custom_derive)]
-#![plugin(arthas_plugin)]
 
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate arthas_derive;
 extern crate rand;
 extern crate arthas;
 extern crate env_logger;
@@ -22,13 +22,11 @@ fn test_concurrent() {
     let mut threads = Vec::new();
 
     for _ in 0..10 {
-        threads.push(spawn(|| {
-            for _ in 0..5 {
-                insert();
-                remove();
-                find();
-                replace();
-            }
+        threads.push(spawn(|| for _ in 0..5 {
+            insert();
+            remove();
+            find();
+            replace();
         }));
     }
 

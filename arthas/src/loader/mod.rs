@@ -25,7 +25,7 @@ use store::{is_persistence, persistences, memories, config};
 
 
 pub fn load<T: Structure>() {
-    let struct_name = utils::reflect::get_type_name::<T>();
+    let struct_name = T::get_struct_name();
 
     fix_persistence_name(&struct_name);
     check_log_and_persistence(&struct_name);

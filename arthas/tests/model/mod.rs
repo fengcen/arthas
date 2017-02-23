@@ -2,23 +2,25 @@
 extern crate serde_json;
 extern crate arthas;
 
-pub use arthas::traits::Schema;
+pub use arthas::traits::Arthas;
 use std::collections::HashMap;
 
-#[arthas]
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
+#[arthas(is_one, rename="string_one=one")]
 pub struct Atomic {
     pub string_one: String,
     pub string_two: String,
     pub hash_map: HashMap<String, usize>,
 }
 
-#[arthas]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
 pub struct Comment {
     pub title: String,
     pub content: String,
 }
 
-#[arthas]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
 pub struct Article {
     pub _id: String,
     pub title: String,
@@ -44,17 +46,17 @@ impl Article {
     }
 }
 
-#[arthas]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
 pub struct Comments {
     pub day_to_comments: HashMap<String, Comment>,
 }
 
-#[arthas]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
 pub struct Articles {
     pub day_to_articles: HashMap<String, Article>,
 }
 
-#[arthas]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
 pub struct Blog {
     pub articles: Articles,
     pub comments: Comments,

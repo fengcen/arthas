@@ -1,9 +1,9 @@
-#![feature(plugin, custom_derive, test)]
-#![plugin(arthas_plugin)]
+#![cfg_attr(all(feature = "unstable", test), feature(test))]
 
 #[macro_use]
 extern crate serde_derive;
-extern crate test;
+#[macro_use]
+extern crate arthas_derive;
 extern crate rand;
 extern crate arthas;
 extern crate env_logger;
@@ -13,31 +13,35 @@ pub mod common;
 #[path = "../tests/model/mod.rs"]
 pub mod model;
 
-use model::*;
-use common::setup;
+#[cfg(all(feature = "unstable", test))]
+mod benches {
+    extern crate test;
 
+    use model::*;
+    use super::common::setup;
 
-#[bench]
-fn bench_a_insert(b: &mut test::Bencher) {
-    setup();
+    #[bench]
+    fn bench_a_insert(b: &mut test::Bencher) {
+        setup();
 
-    b.iter(|| {
-        Article::session()
-            .insert(Article::new("Hello world!"))
-            .unwrap()
-    })
-}
+        b.iter(|| {
+            Article::session()
+                .insert(Article::new("Hello world!"))
+                .unwrap()
+        })
+    }
 
-#[bench]
-fn bench_find(b: &mut test::Bencher) {
-    setup();
+    #[bench]
+    fn bench_find(b: &mut test::Bencher) {
+        setup();
 
-    b.iter(|| {
-        Article::session()
-            .field("title")
-            .eq("Hello world!")
-            .limit(100)
-            .find()
-            .unwrap()
-    })
+        b.iter(|| {
+            Article::session()
+                .field("title")
+                .eq("Hello world!")
+                .limit(100)
+                .find()
+                .unwrap()
+        })
+    }
 }

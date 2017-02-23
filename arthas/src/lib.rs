@@ -6,26 +6,25 @@
 //!
 //!     ```html
 //!     [dependencies]
-//!     arthas = "^0.2"
-//!     arthas_plugin = "^0.1"
+//!     arthas = "^0.3"
+//!     arthas_derive = "^0.1"
 //!     serde_derive = "^0.9"
 //!     ```
 //!
 //! 2. In your `main.rs` or `lib.rs`:
 //!
 //!     ```html
-//!     #![feature(plugin, custom_derive)]
-//!     #![plugin(arthas_plugin)]
-//!
+//!     extern crate arthas;
+//!     #[macro_use]
+//!     extern crate arthas_derive;
 //!     #[macro_use]
 //!     extern crate serde_derive;
-//!     extern crate arthas;
 //!     ```
 //!
-//! 3. Add `[arthas]` attribute to your `struct`:
+//! 3. Add "#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]" attribute to your struct.
 //!
 //!     ```html
-//!     #[arthas]
+//!     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
 //!     pub struct Article {
 //!         pub _id: String,    // If you want to use id. add a field named `_id`.
 //!         pub title: String,
@@ -39,16 +38,15 @@
 //! All struct can use the static method `session()`. `session()` will return a [`Query`](struct.Query.html).
 //!
 //! ```
-//! #![feature(plugin, custom_derive)]
-//! #![plugin(arthas_plugin)]
-//!
+//! extern crate arthas;
+//! #[macro_use]
+//! extern crate arthas_derive;
 //! #[macro_use]
 //! extern crate serde_derive;
-//! extern crate arthas;
 //!
 //! use arthas::prelude::*;
 //!
-//! #[arthas]
+//! #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
 //! pub struct Article {
 //!     pub _id: String,
 //!     pub title: String,
@@ -97,8 +95,8 @@
 //! Sometimes you want to update your structure. Like renaming or removing fields. Arthas will automatically remove and add fields, but you have to tell Arthas if you want to **rename** fields.
 //!
 //! ```html
-//! #[arthas]
-//! #[arthas_rename = "content = body, views = visit"] // Use `[arthas_rename]` attribute.
+//! #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]
+//! #[arthas(rename = "content = body, views = visit")] // Use `#[arthas]` attribute.
 //! pub struct Article {
 //!     pub _id: String,
 //!     pub title: String,
@@ -107,12 +105,8 @@
 //! }
 //! ```
 //!
-#![feature(core_intrinsics)]
-#![cfg_attr(all(test), feature(test))]
 #![deny(missing_docs)]
 
-#[cfg(test)]
-extern crate test;
 #[cfg(test)]
 extern crate env_logger;
 

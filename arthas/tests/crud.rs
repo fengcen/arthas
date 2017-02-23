@@ -1,10 +1,10 @@
-#![feature(plugin, custom_derive)]
-#![plugin(arthas_plugin)]
 
 extern crate rand;
 extern crate arthas;
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate arthas_derive;
 extern crate env_logger;
 
 pub mod common;

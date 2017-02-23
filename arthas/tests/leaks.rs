@@ -1,8 +1,8 @@
-#![feature(plugin, custom_derive)]
-#![plugin(arthas_plugin)]
 
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate arthas_derive;
 extern crate rand;
 extern crate arthas;
 extern crate env_logger;

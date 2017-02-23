@@ -1,6 +1,6 @@
 [package]
 name = "arthas"
-version = "0.2.0"
+version = "0.3.0"
 description = "Arthas is an in-memory structure database."
 keywords = ["database", "in-memory", "structure", "db", "embedded"]
 authors = ["fengcen <fengcen.love@gmail.com>"]
@@ -12,6 +12,9 @@ license = "MIT"
 [lib]
 name = "arthas"
 path = "src/lib.rs"
+
+[features]
+unstable = []
 
 [dependencies]
 quick-error = "^1.1"
@@ -33,7 +36,7 @@ chrono = { version = "^0.2", features = ["serde"] }
 objectid = { version = "^0.1", features = ["serde"] }
 
 [dev-dependencies]
-arthas_plugin = { version = "^0.1", path = "../arthas_plugin" }
+arthas_derive = { version = "^0.1", path = "../arthas_derive" }
 maplit = "^0.1"
 mktemp = "^0.3"
 rand = "^0.3"

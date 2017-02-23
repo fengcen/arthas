@@ -6,7 +6,6 @@ use super::logger::Logger;
 use store::is_persistence;
 use traits::Structure;
 use loader::{persistence_exits, create_persistence};
-use utils::reflect::get_type_name;
 
 
 pub struct PersistenceService {
@@ -15,7 +14,7 @@ pub struct PersistenceService {
 
 impl PersistenceService {
     pub fn new<T: Structure>() -> PersistenceService {
-        let struct_name = get_type_name::<T>();
+        let struct_name = T::get_struct_name();
 
         if is_persistence() && !persistence_exits(&struct_name) {
             create_persistence(&struct_name, &T::get_field_int_map());
