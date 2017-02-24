@@ -10,22 +10,14 @@ Arthas is an in-memory structure database.
 ## [Document](https://docs.rs/arthas)
 
 ## Prerequisites
-Arthas required Rust 1.15 or above.
-
-## Upgrade to arthas 0.3 and arthas_derive
-1. Rename all your data files to only contains struct name. For example, rename "model.user.User" to "User".
-2. Replace attribute `#[arthas]` with `#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]`
-3. If you use attribute value like `#[arthas(one)]`, replace with the attribute `#[arthas(is_one)]`
-4. If you use the rename attribute like `#[arthas_rename("from = to")]`, replace with the attribute `#[arthas(rename = "from = to")]`
-5. If you use both `#[arthas(one)]` and `#[arthas_rename("from = to")]`, replace with `#[arthas(is_one, rename = "from = to")]`
+Arthas requires Rust 1.15 or above.
 
 ## Features
-* Persistence
-* Automatically update fields
-* Automatic indexing
-* Use structure without ORM
-* No complicated setup is required
-
+* Support persistence.
+* Automatically update fields.
+* Automatic indexing.
+* Use structure without ORM.
+* Embedded.
 
 ## Usage
 Add dependencies to Cargo.toml
@@ -72,6 +64,13 @@ extern crate serde_derive;
 
 ## Examples
 Examples can be found in the [Documentation](https://docs.rs/arthas).
+
+## Upgrade to arthas 0.3 and arthas_derive
+1. Rename all your data files to only contains struct name. For example, rename "model.user.User" to "User".
+2. Replace attribute `#[arthas]` with `#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]`
+3. If you use attribute value like `#[arthas(one)]`, replace with the attribute `#[arthas(is_one)]`
+4. If you use the rename attribute like `#[arthas_rename("from = to")]`, replace with the attribute `#[arthas(rename = "from = to")]`
+5. If you use both `#[arthas(one)]` and `#[arthas_rename("from = to")]`, replace with `#[arthas(is_one, rename = "from = to")]`
 
 ## License
 arthas is primarily distributed under the terms of the MIT license.

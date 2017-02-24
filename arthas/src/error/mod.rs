@@ -11,9 +11,9 @@ quick_error! {
         Serialize {
             from(::serde_json::error::Error)
         }
-        /// Required id.
+        /// Requires id.
         RequiresId {
-            display("Required id.")
+            display("Requires id.")
         }
         /// No field in the struct.
         FieldNotFound {
