@@ -1,25 +1,32 @@
-
 Arthas
 ======
+
 [![Build Status](https://travis-ci.org/fengcen/arthas.svg?branch=master)](https://travis-ci.org/fengcen/arthas)
 [![status](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![docs](https://docs.rs/arthas/badge.svg)](https://docs.rs/arthas)
 
 Arthas is an in-memory structure database.
 
-## [Document](https://docs.rs/arthas)
+[Document](https://docs.rs/arthas)
+----------------------------------
 
-## Prerequisites
+Prerequisites
+-------------
+
 Arthas requires Rust 1.15 or above.
 
-## Features
+Features
+--------
+
 * Support persistence.
 * Automatically update fields.
 * Automatic indexing.
 * Use structure without ORM.
 * Embedded.
 
-## Usage
+Usage
+-----
+
 Add dependencies to Cargo.toml
 
 ```toml
@@ -39,7 +46,9 @@ extern crate arthas_derive;
 extern crate serde_derive;
 ```
 
-## CRUD Methods
+CRUD Methods
+------------
+
 - [x] insert()
 - [x] remove()
 - [x] replace()
@@ -47,7 +56,9 @@ extern crate serde_derive;
 - [x] find_one()
 - [x] count()
 
-## Query Methods
+Query Methods
+-------------
+
 - [x] id()
 - [x] limit()
 - [x] offset()
@@ -62,16 +73,22 @@ extern crate serde_derive;
 - [x] desc()
 - [x] asc()
 
-## Examples
+Examples
+--------
+
 Examples can be found in the [Documentation](https://docs.rs/arthas).
 
-## Upgrade to arthas 0.3 and arthas_derive
+Upgrade to arthas 0.3 and arthas_derive
+---------------------------------------
+
 1. Rename all your data files to only contains struct name. For example, rename "model.user.User" to "User".
 2. Replace attribute `#[arthas]` with `#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Arthas)]`
 3. If you use attribute value like `#[arthas(one)]`, replace with the attribute `#[arthas(is_one)]`
 4. If you use the rename attribute like `#[arthas_rename("from = to")]`, replace with the attribute `#[arthas(rename = "from = to")]`
 5. If you use both `#[arthas(one)]` and `#[arthas_rename("from = to")]`, replace with `#[arthas(is_one, rename = "from = to")]`
 
-## License
+License
+-------
+
 arthas is primarily distributed under the terms of the MIT license.
 See [LICENSE](LICENSE) for details.
