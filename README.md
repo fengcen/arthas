@@ -33,6 +33,7 @@ Add dependencies to Cargo.toml
 [dependencies]
 arthas = "^0.3"
 arthas_derive = "^0.1"
+serde = "^0.9"
 serde_derive = "^0.9"
 ```
 
