@@ -29,14 +29,15 @@ pub enum FieldType {
     Struct(FieldTypeMap),
 }
 
-use serde::{Serialize, Deserialize};
+use serde::Serialize;
+use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 
 pub trait Structure
-    : 'static + Serialize + Deserialize + Default + Clone + Debug + PartialEq + Send + Sync + Arthas
+    : 'static + Serialize + DeserializeOwned + Default + Clone + Debug + PartialEq + Send + Sync + Arthas
     {
 }
-impl<T: 'static + Serialize + Deserialize + Default + Clone + Debug + PartialEq + Send + Sync + Arthas> Structure for T {}
+impl<T: 'static + Serialize + DeserializeOwned + Default + Clone + Debug + PartialEq + Send + Sync + Arthas> Structure for T {}
 
 pub fn get_unique_int_str(field: &str) -> String {
     let mut integer = 0;

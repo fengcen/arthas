@@ -387,19 +387,19 @@ fn is_hashmap(type_: &str) -> bool {
 fn get_vec_generic_type(type_: &str) -> Ident {
     let reg = Regex::new("Vec *< *(.*) *>").unwrap();
     let cap = reg.captures(type_).unwrap();
-    to_ident(cap.at(1).unwrap().trim())
+    to_ident(cap[1].trim())
 }
 
 fn get_option_generic_type(type_: &str) -> Ident {
     let reg = Regex::new(r"Option *< *(.*) *>").unwrap();
     let cap = reg.captures(type_).unwrap();
-    to_ident(cap.at(1).unwrap().trim())
+    to_ident(cap[1].trim())
 }
 
 fn get_hashmap_generic_type(type_: &str) -> Ident {
     let reg = Regex::new(r"HashMap *< *[a-z0-9A-Z]+ *, *(.*) *>").unwrap();
     let cap = reg.captures(type_).unwrap();
-    to_ident(cap.at(1).unwrap().trim())
+    to_ident(cap[1].trim())
 }
 
 fn hashmap_is_struct_type(type_: &str) -> bool {
