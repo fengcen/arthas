@@ -2,7 +2,7 @@ Arthas
 ======
 
 [![Build Status](https://travis-ci.org/fengcen/arthas.svg?branch=master)](https://travis-ci.org/fengcen/arthas)
-[![status](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
+[![Project Status: Abandoned – Initial development has started, but there has not yet been a stable, usable release; the project has been abandoned and the author(s) do not intend on continuing development.](https://www.repostatus.org/badges/latest/abandoned.svg)](https://www.repostatus.org/#abandoned)
 [![docs](https://docs.rs/arthas/badge.svg)](https://docs.rs/arthas)
 
 Arthas is an in-memory structure database.
